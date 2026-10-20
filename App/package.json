@@ -1,0 +1,7 @@
+{
+  "name": "hypermarket-cotonou",
+  "private": true,
+  "scripts": {
+    "dev": "node dev.js"
+  }
+}
