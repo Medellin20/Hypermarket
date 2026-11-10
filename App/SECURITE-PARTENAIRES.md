@@ -7,13 +7,13 @@ Ce document définit les exigences minimales à respecter avant de connecter Hyp
 ## 1. Architecture et accès aux données
 
 1. **Privilégier une API partenaire documentée** ou un mécanisme d'échange de fichiers sécurisé. Ne demander un accès direct à une base de données que si aucune interface plus sûre n'est disponible et après accord des deux équipes techniques.
-2. **Ne jamais connecter le navigateur ou l'application frontend directement à une base partenaire.** Les échanges passent par le backend HyperMarket.
+2. **Ne jamais connecter le navigateur directement à une base partenaire.** Les échanges passent par les routes serveur HyperMarket.
 3. **Isoler les intégrations :** utiliser un connecteur et une configuration distincts par partenaire. Une panne ou un incident chez un partenaire ne doit pas donner accès aux données d'un autre.
 4. **Limiter les données échangées** aux champs nécessaires au service convenu (par exemple catalogue, prix, disponibilité et statut de commande). Ne pas aspirer une base complète.
 5. **Définir le sens des échanges et la source de référence** pour chaque donnée : lecture seule par défaut ; toute écriture dans le système du partenaire nécessite une autorisation explicite et un mécanisme de rapprochement.
 6. **Séparer les environnements** de développement, de test et de production. Les environnements de test utilisent des données fictives ou anonymisées et des comptes distincts.
-7. **Pour Supabase, garder la chaîne de connexion PostgreSQL côté backend uniquement.** Ne jamais exposer `DATABASE_URL`, le mot de passe de base de données ou une clé `service_role` dans le frontend. Utiliser TLS et le pooler de connexions recommandé pour l'hébergement.
-8. **Configurer les permissions PostgreSQL explicitement.** L'accès direct PostgreSQL depuis le backend ne passe pas par les politiques RLS de l'API Supabase ; utiliser un rôle dédié aux permissions minimales, et ne pas supposer que RLS protège les requêtes faites avec un rôle privilégié.
+7. **Pour Supabase, garder la clé `service_role` côté serveur uniquement.** Elle contourne les politiques RLS et ne doit jamais être exposée au navigateur, journalisée ou partagée avec un partenaire. Utiliser TLS pour tous les appels à l'API.
+8. **Configurer les politiques et permissions explicitement.** Les opérations privilégiées effectuées avec `service_role` ne sont pas filtrées par RLS ; protéger chaque route serveur par authentification et autorisation, et limiter les fonctions RPC aux rôles nécessaires.
 
 ## 2. Identités, authentification et autorisations
 
@@ -28,9 +28,9 @@ Ce document définit les exigences minimales à respecter avant de connecter Hyp
 
 1. Chiffrer tous les échanges sur des canaux sécurisés (TLS à jour ; VPN ou réseau privé lorsque cela est adapté). Refuser les certificats invalides et ne pas désactiver leur vérification.
 2. Restreindre les connexions entrantes et sortantes aux adresses, ports, services et environnements explicitement autorisés. Ne pas exposer une base de données sur Internet.
-3. Stocker mots de passe, clés et certificats dans un gestionnaire de secrets adapté à la production ; ne jamais les placer dans le code, le dépôt, les journaux, les tickets ou le frontend.
+3. Stocker mots de passe, clés et certificats dans un gestionnaire de secrets adapté à la production ; ne jamais les placer dans le code, le dépôt, les journaux, les tickets ou le navigateur.
 4. Utiliser des secrets distincts par environnement et partenaire. Limiter leur durée de vie, tracer leur accès et les renouveler selon un calendrier convenu ou immédiatement en cas de suspicion de compromission.
-5. Réduire la surface exposée du backend : n'ouvrir que les routes nécessaires, appliquer des limites de débit et configurer des délais d'expiration et des limites de taille pour les requêtes.
+5. Réduire la surface exposée des routes serveur : n'ouvrir que les routes nécessaires, appliquer des limites de débit et configurer des délais d'expiration et des limites de taille pour les requêtes.
 
 ## 4. Données et sécurité applicative
 
