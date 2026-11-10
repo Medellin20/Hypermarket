@@ -1,6 +1,6 @@
 # Configurer Supabase
 
-Supabase est l'unique base de données persistante de l'application. Le serveur Express accède aux tables par l'API Supabase et gère les sessions avec Supabase Auth ; le navigateur ne reçoit jamais la clé `service_role`. Le panier conservé dans le navigateur n'est pas une base de données.
+Supabase est l'unique base de données persistante de l'application. Les routes API Next.js accèdent aux tables via l'API Supabase et gèrent les sessions avec Supabase Auth ; le navigateur ne reçoit jamais la clé `service_role`. Le panier conservé dans le navigateur n'est pas une base de données.
 
 ## Mise en route
 

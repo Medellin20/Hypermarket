@@ -4,7 +4,7 @@ Plateforme de courses en ligne qui regroupe les supermarchés de Cotonou.
 
 ## Stack technique
 
-Un seul projet Next.js (App Router), avec React, Tailwind CSS et l'API Express dans le même serveur Node.js. Supabase PostgreSQL est l'unique base de données.
+Un seul projet Next.js (App Router), avec React, Tailwind CSS et des routes API Next.js. Supabase est l'unique base de données.
 
 ## Démarrage local
 
